@@ -28,7 +28,7 @@ try {
 
     <?php include("head.php") ?>
 
-    <?php echo "<h1>Welcome " . $_COOKIE["username"] . "</h1>"; ?>
+    <?php echo "<h1>Welcome " . $_SESSION["user"]["username"] . "</h1>"; ?>
 
 
 

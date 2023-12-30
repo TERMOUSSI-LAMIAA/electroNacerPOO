@@ -22,106 +22,171 @@ class ProduitDAO
         return $products;
     }
 
-    public function insert_product($Product)
+    // public function insert_product($Product)
+    // {
+    //     $query = "INSERT INTO products (`reference`, `etiquette`, `descpt`, `codeBarres`, `img`, `prixAchat`, `prixFinal`, `prixOffre`, `qntMin`, `qntStock`, `catg`) 
+    //               VALUES (:reference, :etiquette, :descpt, :codeBarres, :img, :prixAchat, :prixFinal, :prixOffre, :qntMin, :qntStock, :catg)";
+    
+    //     $stmt = $this->db->prepare($query);
+    
+    //     $reference = $Product->getRef();
+    //     $etiquette = $Product->getEtqt();
+    //     $descpt = $Product->getDesc();
+    //     $codeBarres = $Product->getCode_barre();
+    //     $img = $Product->getImgProd();
+    //     $prixAchat = $Product->getPr_ach();
+    //     $prixFinal = $Product->getPr_fin();
+    //     $prixOffre = $Product->getOffre_pr();
+    //     $qntMin = $Product->getQte_min();
+    //     $qntStock = $Product->getQte_stock();
+    //     $catg = $Product->getCatg();
+    
+    //     $stmt->bindParam(':reference', $reference);
+    //     $stmt->bindParam(':etiquette', $etiquette);
+    //     $stmt->bindParam(':descpt', $descpt);
+    //     $stmt->bindParam(':codeBarres', $codeBarres);
+    //     $stmt->bindParam(':img', $img);
+    //     $stmt->bindParam(':prixAchat', $prixAchat);
+    //     $stmt->bindParam(':prixFinal', $prixFinal);
+    //     $stmt->bindParam(':prixOffre', $prixOffre);
+    //     $stmt->bindParam(':qntMin', $qntMin);
+    //     $stmt->bindParam(':qntStock', $qntStock);
+    //     $stmt->bindParam(':catg', $catg);
+    
+    //     try {
+    //         $stmt->execute();
+    //         echo "Record inserted successfully.";
+    //     } catch (PDOException $e) {
+    //         throw $e;
+    //     }
+    // }
+    public function insertProduct($title, $codeBar, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg)
     {
-        $query = "INSERT INTO products (`reference`, `etiquette`, `descpt`, `codeBarres`, `img`, `prixAchat`, `prixFinal`, `prixOffre`, `qntMin`, `qntStock`, `catg`) 
-                  VALUES (:reference, :etiquette, :descpt, :codeBarres, :img, :prixAchat, :prixFinal, :prixOffre, :qntMin, :qntStock, :catg)";
+        $stmt = $this->db->prepare("INSERT INTO 
+            products(etiquette, codeBarres, prixAchat, prixFinal, prixOffre, descpt, qntMin, qntStock, img, catg)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$title, $codeBar, $prixAchat, $prixFinal, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg]);
+
+        move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6v2\admin\assets\images\\' . $_FILES['img']['name']);
+    }
+    // public function update_product($Product)
+    // {
+    //     $query = "UPDATE `products` SET 
+    //               `etiquette` = :etiquette, 
+    //               `descpt` = :descpt,
+    //               `codeBarres` = :codeBarres,
+    //               `img` = :img,
+    //               `prixAchat` = :prixAchat,
+    //               `prixFinal` = :prixFinal,
+    //               `prixOffre` = :prixOffre,
+    //               `qntMin` = :qntMin,
+    //               `qntStock` = :qntStock,
+    //               `catg` = :catg
+    //               WHERE `reference` = :reference";
     
-        $stmt = $this->db->prepare($query);
+    //     $stmt = $this->db->prepare($query);
     
-        $reference = $Product->getRef();
-        $etiquette = $Product->getEtqt();
-        $descpt = $Product->getDesc();
-        $codeBarres = $Product->getCode_barre();
-        $img = $Product->getImgProd();
-        $prixAchat = $Product->getPr_ach();
-        $prixFinal = $Product->getPr_fin();
-        $prixOffre = $Product->getOffre_pr();
-        $qntMin = $Product->getQte_min();
-        $qntStock = $Product->getQte_stock();
-        $catg = $Product->getCatg();
+    //     $reference = $Product->getRef();
+    //     $etiquette = $Product->getEtqt();
+    //     $descpt = $Product->getDesc();
+    //     $codeBarres = $Product->getCode_barre();
+    //     $img = $Product->getImgProd();
+    //     $prixAchat = $Product->getPr_ach();
+    //     $prixFinal = $Product->getPr_fin();
+    //     $prixOffre = $Product->getOffre_pr();
+    //     $qntMin = $Product->getQte_min();
+    //     $qntStock = $Product->getQte_stock();
+    //     $catg = $Product->getCatg();
     
-        $stmt->bindParam(':reference', $reference);
-        $stmt->bindParam(':etiquette', $etiquette);
-        $stmt->bindParam(':descpt', $descpt);
-        $stmt->bindParam(':codeBarres', $codeBarres);
-        $stmt->bindParam(':img', $img);
-        $stmt->bindParam(':prixAchat', $prixAchat);
-        $stmt->bindParam(':prixFinal', $prixFinal);
-        $stmt->bindParam(':prixOffre', $prixOffre);
-        $stmt->bindParam(':qntMin', $qntMin);
-        $stmt->bindParam(':qntStock', $qntStock);
-        $stmt->bindParam(':catg', $catg);
+    //     $stmt->bindParam(':reference', $reference);
+    //     $stmt->bindParam(':etiquette', $etiquette);
+    //     $stmt->bindParam(':descpt', $descpt);
+    //     $stmt->bindParam(':codeBarres', $codeBarres);
+    //     $stmt->bindParam(':img', $img);
+    //     $stmt->bindParam(':prixAchat', $prixAchat);
+    //     $stmt->bindParam(':prixFinal', $prixFinal);
+    //     $stmt->bindParam(':prixOffre', $prixOffre);
+    //     $stmt->bindParam(':qntMin', $qntMin);
+    //     $stmt->bindParam(':qntStock', $qntStock);
+    //     $stmt->bindParam(':catg', $catg);
     
-        try {
-            $stmt->execute();
-            echo "Record inserted successfully.";
-        } catch (PDOException $e) {
-            throw $e;
-        }
+    //     try {
+    //         $stmt->execute();
+    //         echo "Record updated successfully.";
+    //     } catch (PDOException $e) {
+    //         throw $e;
+    //     }
+    // }
+    public function update_product($ref, $title, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $catg, $img)
+{
+    $query = "UPDATE `products` SET 
+              `etiquette` = :title, 
+              `descpt` = :desc,
+              `prixAchat` = :prixAchat,
+              `prixFinal` = :prixFinal,
+              `qntMin` = :qntMin,
+              `qntStock` = :qntStock,
+              `catg` = :catg";
+
+    // If an image is provided, include it in the update
+    if (!empty($img)) {
+        $query .= ", `img` = :img";
     }
 
-    public function update_product($Product)
-    {
-        $query = "UPDATE `products` SET 
-                  `etiquette` = :etiquette, 
-                  `descpt` = :descpt,
-                  `codeBarres` = :codeBarres,
-                  `img` = :img,
-                  `prixAchat` = :prixAchat,
-                  `prixFinal` = :prixFinal,
-                  `prixOffre` = :prixOffre,
-                  `qntMin` = :qntMin,
-                  `qntStock` = :qntStock,
-                  `catg` = :catg
-                  WHERE `reference` = :reference";
-    
-        $stmt = $this->db->prepare($query);
-    
-        $reference = $Product->getRef();
-        $etiquette = $Product->getEtqt();
-        $descpt = $Product->getDesc();
-        $codeBarres = $Product->getCode_barre();
-        $img = $Product->getImgProd();
-        $prixAchat = $Product->getPr_ach();
-        $prixFinal = $Product->getPr_fin();
-        $prixOffre = $Product->getOffre_pr();
-        $qntMin = $Product->getQte_min();
-        $qntStock = $Product->getQte_stock();
-        $catg = $Product->getCatg();
-    
-        $stmt->bindParam(':reference', $reference);
-        $stmt->bindParam(':etiquette', $etiquette);
-        $stmt->bindParam(':descpt', $descpt);
-        $stmt->bindParam(':codeBarres', $codeBarres);
+    $query .= " WHERE `codeBarres` = :ref";
+
+    $stmt = $this->db->prepare($query);
+
+    $stmt->bindParam(':ref', $ref);
+    $stmt->bindParam(':title', $title);
+    $stmt->bindParam(':desc', $desc);
+    $stmt->bindParam(':prixAchat', $prixAchat);
+    $stmt->bindParam(':prixFinal', $prixFinal);
+    $stmt->bindParam(':qntMin', $qntMin);
+    $stmt->bindParam(':qntStock', $qntStock);
+    $stmt->bindParam(':catg', $catg);
+
+    // If an image is provided, bind its value
+    if (!empty($img)) {
         $stmt->bindParam(':img', $img);
-        $stmt->bindParam(':prixAchat', $prixAchat);
-        $stmt->bindParam(':prixFinal', $prixFinal);
-        $stmt->bindParam(':prixOffre', $prixOffre);
-        $stmt->bindParam(':qntMin', $qntMin);
-        $stmt->bindParam(':qntStock', $qntStock);
-        $stmt->bindParam(':catg', $catg);
-    
-        try {
-            $stmt->execute();
-            echo "Record updated successfully.";
-        } catch (PDOException $e) {
-            throw $e;
-        }
     }
+
+    try {
+        $stmt->execute();
+        echo "Record updated successfully.";
+    } catch (PDOException $e) {
+        throw $e;
+    }
+}
+    // public function delete_product($id)
+    // {
+    //     $query = "UPDATE `products` SET `isHide` = 1 WHERE `reference` = :id";
+    //     $stmt = $this->db->prepare($query);
     
-    public function delete_product($id)
+    //     $stmt->bindParam(':id', $id);
+    
+    //     try {
+    //         $stmt->execute();
+    //         echo "Record deleted successfully.";
+    //     } catch (PDOException $e) {
+    //         throw $e;
+    //     }
+    // }
+    public function hideProduct($etiquette)
     {
-        $query = "UPDATE `products` SET `isHide` = 1 WHERE `reference` = :id";
-        $stmt = $this->db->prepare($query);
-    
-        $stmt->bindParam(':id', $id);
-    
         try {
+            $sql = "UPDATE products
+                    SET isHide = 1
+                    WHERE etiquette = :etiquette";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':etiquette', $etiquette);
             $stmt->execute();
-            echo "Record deleted successfully.";
+            
+            return true; // Success
         } catch (PDOException $e) {
-            throw $e;
+            // Handle the exception or log the error
+            return false; // Error
         }
     }
 }

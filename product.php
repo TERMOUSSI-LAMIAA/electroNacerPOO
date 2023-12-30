@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("Model/connexion.php");
 include("DAO/ProduitDAO.php");
 include("DAO/categorieDAO.php");
@@ -9,7 +10,16 @@ $products = $productObj->getProduit();
 
 $categoryObj = new CategorieDAO();
 $catgs = $categoryObj->getCategorie();
+$conn = Database::getInstance()->getConnection();
+$nbrOfPanier = 0;
+if (isset($_SESSION["client"])) {
+	$client = $_SESSION["client"]["username"];
+	$stmt = $conn->prepare("SELECT SUM(qnt) as card_count FROM panier WHERE client_username = '$client'");
+	$stmt->execute();
+	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+	$nbrOfPanier = $result[0]["card_count"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -71,9 +81,9 @@ $catgs = $categoryObj->getCategorie();
 					<li><a href="#"><i class="fa fa-map-marker"></i> Youcode Safi</a></li>
 				</ul>
 				<ul class="header-links pull-right">
-					<?php if (isset($_SESSION['client'])) { ?>
+					<?php if (isset($_SESSION["client"])) { ?>
 						<li><a href="#"><i class="fa fa-user-o"></i>
-								<?php echo $_SESSION['client'] ?>
+								<?php echo $_SESSION["client"]["fullname"] ?>
 							</a></li>
 						<li><a href="logoutClient.php"><i class="fa fa-user-o"></i> Logout</a></li>
 					<?php } else { ?>
@@ -118,7 +128,9 @@ $catgs = $categoryObj->getCategorie();
 									<a href="cart.php" id="panier">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Your Cart</span>
-										<div class="qty"><?php echo $nbrOfPanier ?></div>
+										<div class="qty">
+											<?php echo $nbrOfPanier ?>
+										</div>
 									</a>
 								</div>
 							<?php } ?>
@@ -153,7 +165,9 @@ $catgs = $categoryObj->getCategorie();
 				<ul class="main-nav nav navbar-nav">
 					<li class="li-padding">All Products</li>
 					<?php foreach ($catgs as $catg) { ?>
-						<li class="li-padding"><?php echo $catg->getNomCat(); ?></li>
+						<li class="li-padding">
+							<?php echo $catg->getNomCat(); ?>
+						</li>
 					<?php } ?>
 				</ul>
 				<!-- /NAV -->
@@ -254,25 +268,17 @@ $catgs = $categoryObj->getCategorie();
 	<script src="js/main.js"></script>
 
 	<script>
+
+		let menu = document.getElementById('menu-product');
 		let listCatg = document.querySelectorAll('.li-padding');
 		listCatg[0].style.color = '#D10024';
 
-		function getData(tableName) {
-			var result;
-			let myRequest = new XMLHttpRequest();
-			myRequest.open("GET", "admin/ajaxConn.php?table=" + tableName, false);
-			myRequest.onreadystatechange = function() {
-				if (this.readyState === 4 && this.status === 200) {
-					result = JSON.parse(this.responseText);
-				}
-			}
-			myRequest.send();
+		async function getData(tableName) {
+			const response = await fetch('admin/ajaxConn.php?table=' + tableName);
+			const result = await response.json();
+			console.log(result);
 			return result;
 		}
-
-		let products = getData("products");
-
-		let menu = document.getElementById('menu-product');
 
 		function displayProducts(object) {
 			let name = object['etiquette'];
@@ -280,119 +286,170 @@ $catgs = $categoryObj->getCategorie();
 			let firstDiv = document.createElement('div');
 			firstDiv.className = 'col-md-3 col-xs-6';
 			firstDiv.innerHTML = `
-				<div class="product">
-					<div class="product-img">
-						<img src="admin/${object['img']}" alt="">
-						<div class="product-label">
-									<span class="sale">-${(object['prixFinal'] - object['prixOffre']) / object['prixFinal'] * 100}%</span>
-						</div>
-					</div>
-					
-					<div class="product-body">
-						<p class="product-category">${object['catg']}</p>
-						<h3 class="product-name"><a href="productPage.php?ref=${object['reference']}">${name}</a></h3>
-						<h4 class="product-price">${object['prixOffre']}DH <del class="product-old-price">${object['prixFinal']}DH</del></h4>
-						<div class="product-rating">
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star-o"></i>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn" onclick="addToCart(${ref})">add to cart</button>
-					</div>
-				</div>
-			`;
+	<div class="product">
+		<div class="product-img">
+			<img src="admin/${object['img']}" alt="">
+			<div class="product-label">
+						<span class="sale">-${(object['prixFinal'] - object['prixOffre']) / object['prixFinal'] * 100}%</span>
+			</div>
+		</div>
+		
+		<div class="product-body">
+			<p class="product-category">${object['catg']}</p>
+			<h3 class="product-name"><a href="productPage.php?ref=${object['reference']}">${name}</a></h3>
+			<h4 class="product-price">${object['prixOffre']}DH <del class="product-old-price">${object['prixFinal']}DH</del></h4>
+			<div class="product-rating">
+				<i class="fa fa-star"></i>
+				<i class="fa fa-star"></i>
+				<i class="fa fa-star"></i>
+				<i class="fa fa-star"></i>
+				<i class="fa fa-star-o"></i>
+			</div>
+		</div>
+		<div class="add-to-cart">
+			<button class="add-to-cart-btn" onclick="addToCart(${ref})">add to cart</button>
+		</div>
+	</div>
+`;
 			menu.appendChild(firstDiv);
 		}
-		products.forEach(function(pro) {
-			displayProducts(pro);
-		});
 
-		listCatg.forEach(function(catg) {
 
-			catg.addEventListener('click', function() {
-				listCatg.forEach(function(c) {
-					c.style.color = 'black';
-				});
-				document.getElementById('title-catg').innerText = catg.textContent;
-				catg.style.color = '#D10024';
-				menu.innerHTML = `
-					<div class="col-md-12">
-						<div class="section-title text-center">
-							<h3 class="title" id="title-catg">${catg.textContent}</h3>
-						</div>
-					</div>
-				`;
-				if (catg.textContent === 'All Products') {
-					products.forEach(function(pro) {
-						displayProducts(pro);
-					});
-				} else {
-					products.forEach(function(pro) {
-						// console.log(catg.textContent);
-						// console.log();
-						if (pro['catg'] === catg.textContent) displayProducts(pro);
-					});
-				}
+
+		getData("products").then(products => {
+			console.log("getDataCalled");
+
+
+
+
+			products.forEach(function (pro) {
+				displayProducts(pro);
 			});
-		});
-		/* Search of Products */
-		let search = document.getElementById('search-input');
-		search.addEventListener('keyup', function() {
 
-			let myRequest = new XMLHttpRequest();
-			myRequest.open("GET", "admin/ajaxConn.php?liveSearch=" + search.value, true);
-			myRequest.onreadystatechange = function() {
-				if (this.readyState === 4 && this.status === 200) {
-					// result = JSON.parse(this.responseText);
-					if (this.responseText != "") {
-						menu.innerHTML = '';
-						JSON.parse(this.responseText).forEach(function(pro) {
+			listCatg.forEach(function (catg) {
+
+				catg.addEventListener('click', function () {
+					listCatg.forEach(function (c) {
+						c.style.color = 'black';
+					});
+					document.getElementById('title-catg').innerText = catg.textContent;
+					catg.style.color = '#D10024';
+					menu.innerHTML = `
+		<div class="col-md-12">
+			<div class="section-title text-center">
+				<h3 class="title" id="title-catg">${catg.textContent}</h3>
+			</div>
+		</div>
+	`;
+					if (catg.textContent === 'All Products') {
+						products.forEach(function (pro) {
 							displayProducts(pro);
 						});
 					} else {
-						menu.innerHTML = `
-							<div class="col-md-12">
-								<div class="section-title text-center">
-									<h3 class="title" id="title-catg">ALl Products</h3>
-								</div>
-							</div>
-						`;
-						products.forEach(function(pro) {
-							displayProducts(pro);
+						products.forEach(function (pro) {
+							// console.log(catg.textContent);
+							// console.log();
+							if (pro['catg'] === catg.textContent) displayProducts(pro);
 						});
 					}
+				});
+			});
 
+
+			/* Search of Products */
+			let search = document.getElementById('search-input');
+			search.addEventListener('keyup', function () {
+
+				let myRequest = new XMLHttpRequest();
+				myRequest.open("GET", "admin/ajaxConn.php?liveSearch=" + search.value, true);
+				myRequest.onreadystatechange = function () {
+					if (this.readyState === 4 && this.status === 200) {
+						// result = JSON.parse(this.responseText);
+						if (this.responseText != "") {
+							menu.innerHTML = '';
+							JSON.parse(this.responseText).forEach(function (pro) {
+								displayProducts(pro);
+							});
+						} else {
+							menu.innerHTML = `
+				<div class="col-md-12">
+					<div class="section-title text-center">
+						<h3 class="title" id="title-catg">ALl Products</h3>
+					</div>
+				</div>
+			`;
+							products.forEach(function (pro) {
+								displayProducts(pro);
+							});
+						}
+
+					}
 				}
+				myRequest.send();
+			});
+			/* End Search of Products */
+
+			/* Pagination */
+			let itemsPerPage = 6;
+			let nbrOfPages = Math.ceil(products.length / itemsPerPage);
+			let pagination = document.getElementById('pagination');
+			for (let i = 0; i < nbrOfPages; i++) {
+				let liNbr = document.createElement('li');
+				liNbr.className = 'list-group-item list';
+				liNbr.textContent = i + 1;
+				pagination.appendChild(liNbr);
 			}
-			myRequest.send();
+
+			let allList = document.querySelectorAll('.list');
+			allList.forEach(function (oneList) {
+				oneList.addEventListener('click', function () {
+					menu.innerHTML = `
+				<div class="col-md-12">
+					<div class="section-title text-center">
+						<h3 class="title" id="title-catg">ALl Products</h3>
+					</div>
+				</div>
+	`;
+					for (let i = itemsPerPage * (Number(oneList.textContent) - 1); i < itemsPerPage * (Number(oneList.textContent)); i++) {
+						displayProducts(products[i]);
+					}
+				});
+			});
+
+
+
+			/* End Of Pagination */
 		});
-		/* End Search of Products */
+
+
+
 
 		/* Add To Cart */
 
 		function addToCart(ref) {
 			let myRequest = new XMLHttpRequest();
 			myRequest.open("GET", "ajax.php?ref=" + ref, true);
-			myRequest.onreadystatechange = function() {
+			myRequest.onreadystatechange = function () {
 				if (this.readyState === 4 && this.status === 200) {
-					console.log(this.responseText);
+					//console.log(this.responseText);
+
+					let count = Number(document.querySelector("#panier > div.qty").innerText)
+					count++;
+					document.querySelector("#panier > div.qty").innerHTML = count;
+
 				}
 			}
 			myRequest.send();
 		}
 
 		let addToCartBtn = document.querySelectorAll('.add-to-cart-btn');
-		addToCartBtn.forEach(function(btn) {
-			btn.addEventListener('click', function() {
+		addToCartBtn.forEach(function (btn) {
+			btn.addEventListener('click', function () {
 				btn.style.background = "red";
 				btn.style.color = "white";
 
-				setTimeout(function() {
-					btn.className = 'add-to-cart-btn';	
+				setTimeout(function () {
+					btn.className = 'add-to-cart-btn';
 					btn.style.background = 'white';
 					btn.style.color = 'red';
 				}, 400);
@@ -401,35 +458,7 @@ $catgs = $categoryObj->getCategorie();
 		/* End Add To Cart */
 
 
-		/* Pagination */
-		let itemsPerPage = 6;
-		let nbrOfPages = Math.ceil(products.length / itemsPerPage);
-		let pagination = document.getElementById('pagination');
-		for (let i = 0; i < nbrOfPages; i++) {
-			let liNbr = document.createElement('li');
-			liNbr.className = 'list-group-item list';
-			liNbr.textContent = i + 1;
-			pagination.appendChild(liNbr);
-		}
 
-		let allList = document.querySelectorAll('.list');
-		allList.forEach(function(oneList) {
-			oneList.addEventListener('click', function() {
-				menu.innerHTML = `
-							<div class="col-md-12">
-								<div class="section-title text-center">
-									<h3 class="title" id="title-catg">ALl Products</h3>
-								</div>
-							</div>
-				`;
-				for (let i = itemsPerPage * (Number(oneList.textContent) - 1); i < itemsPerPage * (Number(oneList.textContent)); i++) {
-					displayProducts(products[i]);
-				}
-			});
-		});
-
-
-		/* End Of Pagination */
 	</script>
 
 

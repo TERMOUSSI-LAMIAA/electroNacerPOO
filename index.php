@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("Model/connexion.php");
 include("DAO/ProduitDAO.php");
 include("DAO/categorieDAO.php");
@@ -10,6 +11,7 @@ $products = $productObj->getProduit();
 $categoryObj = new CategorieDAO();
 $catgs = $categoryObj->getCategorie();
 
+$nbrOfPanier = 0;
 
 ?>
 
@@ -64,9 +66,9 @@ $catgs = $categoryObj->getCategorie();
 					<li><a href="#"><i class="fa fa-map-marker"></i> Youcode Safi</a></li>
 				</ul>
 				<ul class="header-links pull-right">
-					<?php if (isset($_SESSION['client'])) { ?>
+					<?php if (isset($_SESSION["client"])) { ?>
 						<li><a href="#"><i class="fa fa-user-o"></i>
-								<?php echo $_SESSION['client']->getFullnom(); ?>
+								<?php echo $_SESSION['client']["fullname"]; ?>
 							</a></li>
 						<li><a href="logoutClient.php"><i class="fa fa-user-o"></i> Logout</a></li>
 					<?php } else { ?>
@@ -159,7 +161,7 @@ $catgs = $categoryObj->getCategorie();
 			<div class="row">
 				<?php foreach (array_slice($catgs, 2, 3) as $category): ?>
 					<!-- shop -->
-					
+
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">

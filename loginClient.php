@@ -7,24 +7,23 @@ session_start();
 if (!isset($_SESSION['client'])) {
 
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		$username = $_POST['username'];
-		$pass = $_POST['password'];
+        $username = $_POST['username'];
+        $pass = $_POST['password'];
 
-		$clientDAO = new ClientDAO();
-		$client = $clientDAO->getClientByUsername($username);
-
-		if ($client && password_verify($pass, $client->getMdpCl())) {
-			$_SESSION["client"] = $client;
-			header('Location: index.php');
-			exit;
-		} else {
-			//whyyyyyyyyyyyyyyy
-			echo $client->getUsername();
-			echo $client->getMdpCl();
-			echo "incorrect";
-			$noExist = true;
-		}
-	}
+        $clientDAO = new ClientDAO();
+        $client = $clientDAO->getClientByUsername($username);
+        if ($client && password_verify($pass, $client->getMdpCl())) {
+            $_SESSION["client"]["fullname"] = $client->getFullnom();
+            $_SESSION["client"]["username"] = $client->getUsername();
+            header('Location: index.php');
+            exit;
+        } else {
+            //echo $user->getEmailU();
+            //echo $user->getMdpU();
+            echo "incorrect";
+            $noExist = true;
+        }
+    }
 
 	// Your HTML code for the login form goes here
 } else {

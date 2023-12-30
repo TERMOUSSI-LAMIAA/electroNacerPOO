@@ -1,5 +1,6 @@
 <?php
 include("ajaxConn.php");
+include("C:/xampp/htdocs/ElectroNacerPoo/DAO/ProduitDAO.php");
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -23,20 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $catg = $_POST['catg'];
         $img = "assets/images/" . $_FILES['img']['name'];
 
-        if (!empty($_FILES['img']['name'])) {
-            move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6v2\assets\images\\' . $_FILES['img']['name']);
+        $productUpdate = new ProduitDAO();
 
-            $sql = "UPDATE `products` 
-        SET `etiquette` = '$title', `descpt` = '$desc', `prixAchat` = '$prixAchat', `prixFinal` = '$prixFinal',
-        `qntMin` = '$qnt_min', `qntStock` = '$qnt_stock', `catg` = '$catg', `img` = '$img' WHERE `products`.`codeBarres` = '$ref'";
-        } else {
-            $sql = "UPDATE `products` 
-        SET `etiquette` = '$title', `descpt` = '$desc', `prixAchat` = '$prixAchat', `prixFinal` = '$prixFinal',
-        `qntMin` = '$qnt_min', `qntStock` = '$qnt_stock', `catg` = '$catg' WHERE `products`.`codeBarres` = '$ref'";
+        // Check if the image is uploaded
+        if (!empty($_FILES['img']['name'])) {
+            move_uploaded_file($_FILES['img']['tmp_name'], 'C:/xampp/htdocs/brief6v2/assets/images//' . $_FILES['img']['name']);
         }
 
-        $stmt4 = $conn->prepare($sql);
-        $stmt4->execute();
+        $productUpdate->update_product($ref, $title, $prixAchat, $prixFinal, $desc, $qnt_min, $qnt_stock, $catg, $img);
 
         setcookie("ref", "", time() - 1);
         header("Location: modifierProduct.php");

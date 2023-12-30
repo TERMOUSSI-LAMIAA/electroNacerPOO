@@ -1,7 +1,8 @@
 <?php
 include("ajaxConn.php");
+include("C:/xampp/htdocs/ElectroNacerPoo/DAO/ProduitDAO.php");
 
-if (isset($_SESSION['state'])) { ?>
+// if (isset($_SESSION['state'])) { ?>
     <?php
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -17,11 +18,8 @@ if (isset($_SESSION['state'])) { ?>
                 $qntStock = $_POST["qntStock" . $i];
                 $img = "assets/images/" . $_FILES["img" . $i]["name"];
                 $catg = $_POST["catg" . $i];
-                $stmt = $conn->prepare("INSERT INTO 
-                products(etiquette, codeBarres, prixAchat, prixFinal, prixOffre, descpt, qntMin, qntStock, img, catg)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$title, $codeBar, $prixAchat, $prixFinal, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg]);
-                move_uploaded_file($_FILES["img" . $i]['tmp_name'], 'C:\xampp\htdocs\brief6v2\admin\assets\images\\' . $_FILES["img" . $i]['name']);
+                $productInsertion = new ProduitDAO();
+            $productInsertion->insertProduct($title, $codeBar, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg);
             }
         }
     }
@@ -185,8 +183,6 @@ if (isset($_SESSION['state'])) { ?>
 
     </html>
 
-<?php } else {
-    header('Location: index.php');
-}
+<?php 
 
 ?>

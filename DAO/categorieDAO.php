@@ -11,7 +11,7 @@ class CategorieDAO
     }
     public function getCategorie()
     {
-        $query = "SELECT * FROM categories";
+        $query = "SELECT * FROM categories  WHERE isHide = 0 ";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -21,6 +21,27 @@ class CategorieDAO
         }
         return $categories;
     }
+
+    // public function getCategories($name="", $isHide = false)
+    // {
+    //     $query = "SELECT * FROM categories  WHERE isHide = $isHide ";
+
+    //     if($name != "" )
+    //     $query .= " And name = :name ";
+
+    //     $stmt = $this->db->prepare($query);
+
+    //     if($name != "" )
+    //         $stmt->bindParam(':name', $name);
+    //     $stmt->execute();
+    //     $result = $stmt->fetchAll();
+    //     $categories = array();
+    //     foreach ($result as $row) {
+    //         $categories[] = new Categorie($row["name"], $row["descrt"], $row["img"]);
+    //     }
+    //     return $categories;
+    // }
+ 
     public function insert_category($catg)
     {
         $query = "INSERT INTO   categories (`name`, `descrt`, `img`)

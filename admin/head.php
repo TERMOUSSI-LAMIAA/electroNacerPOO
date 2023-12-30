@@ -12,7 +12,7 @@
             </li>
             <?php
             
-            if ($_SESSION["role"] === 1) { ?>
+            if ($_SESSION["user"]["role"] === 1) { ?>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="dashboard.php" id="home">Dashboard</a>
                 </li>

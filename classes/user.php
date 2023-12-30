@@ -13,7 +13,7 @@ class User{
         $this->state = $st;
         $this->role = $rol;
     }
-    public function getEmailU()
+    public function getEmailU() 
     {
         return $this->emailU;
     }

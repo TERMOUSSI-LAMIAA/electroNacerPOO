@@ -4,9 +4,10 @@ try {
     include("ajaxConn.php");
     $stmt = $conn->prepare("INSERT INTO users (email, username, pass, state, role) VALUES (:email, :username, :password, 0, 0)");
     if (isset($_POST["submit"])) {
+        $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
         $stmt->bindParam(':email', $_POST["email"]);
         $stmt->bindParam(':username', $_POST["username"]);
-        $stmt->bindParam(':password', $_POST["password"]);
+        $stmt->bindParam(':password', $password);
         $stmt->execute();
         header("Location: index.php");
     }
@@ -28,7 +29,7 @@ try {
 }
 
 $str = "";
-$hashed = password_hash("otman", PASSWORD_ARGON2I);  
+$hashed = password_hash("otman", PASSWORD_ARGON2I);
 $verifie = password_verify("otmann", $hashed);
 var_dump($verifie);
 ?>
@@ -80,7 +81,7 @@ var_dump($verifie);
             // echo "<p class='text-danger'>The email is Duplicated</p>";
             foreach ($infoExiste as $index => $info) {
                 if ($info) {
-                    echo "<p class='text-danger mt-4'>" . ucfirst($index)  . " existe déjà.</p>";
+                    echo "<p class='text-danger mt-4'>" . ucfirst($index) . " existe déjà.</p>";
                     break;
                 }
             }

@@ -1,24 +1,28 @@
 <?php
 include("ajaxConn.php");
+include("C:/xampp/htdocs/ElectroNacerPoo/DAO/ProduitDAO.php");
 
+$productDAO = new ProductDAO();
+$product = new Product();
 
 $stmt2 = $conn->prepare('SELECT * FROM categories');
 $stmt2->execute();
 $catgs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $hideProduct = $_POST["hided"];
-    $sql = "UPDATE products
-        SET isHide = 1
-        WHERE etiquette = '$hideProduct'
-    ";
-    $stmt3 = $conn->prepare($sql);
-    $stmt3->execute();
+
+    if ($product->hideProduct($hideProduct)) {
+        echo "Product hidden successfully!";
+    } else {
+        echo "Error hiding the product.";
+    }
 
     header("Refresh: 1; url=hideProduct.php");
     exit;
 }
+
+
 ?>
 
 <!DOCTYPE html>
