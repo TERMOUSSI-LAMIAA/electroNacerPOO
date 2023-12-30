@@ -23,4 +23,3 @@ class Categorie
         return $this->photoCat;
     }
 }
-?>

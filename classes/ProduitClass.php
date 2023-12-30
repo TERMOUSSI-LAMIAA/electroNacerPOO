@@ -13,7 +13,7 @@ class Produit
     private $imgProd;
     private $Catg;
 
-    public function __construct($r, $et, $cdbr, $pa, $pf, $ofp, $des, $qmin, $qst, $img,$cat)
+    public function __construct($r, $et, $cdbr, $pa, $pf, $ofp, $des, $qmin, $qst, $img, $cat)
     {
         $this->ref = $r;
         $this->etqt = $et;
@@ -25,7 +25,7 @@ class Produit
         $this->qte_min = $qmin;
         $this->qte_stock = $qst;
         $this->imgProd = $img;
-        $this->Catg= $cat;
+        $this->Catg = $cat;
     }
 
     public function getRef()
@@ -73,4 +73,3 @@ class Produit
         return $this->Catg;
     }
 }
-?>

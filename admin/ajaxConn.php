@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'C:\xampp\htdocs\ElectroNacerPoo\DAO\categorieDAO.php';
+require_once 'DAO/categorieDAO.php';
 $conn = new PDO('mysql:host=localhost;dbname=brief7', 'root', '');
 
 // $stmt = $conn->prepare('SELECT * FROM categories WHERE isHide = 0');

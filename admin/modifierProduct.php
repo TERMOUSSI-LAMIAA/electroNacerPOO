@@ -1,10 +1,9 @@
 <?php
 include("ajaxConn.php");
-include("C:/xampp/htdocs/ElectroNacerPoo/DAO/ProduitDAO.php");
+include("DAO/ProduitDAO.php");
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     if (isset($_POST["hided"])) {
         $hideProduct = $_POST["hided"];
         $stmt3 = $conn->prepare("SELECT * FROM products WHERE etiquette = '$hideProduct'");
@@ -102,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            ?>
+                ?>
                 <div class="mb-3 d-flex justify-content-center">
                     <img class="my-5" src='<?php echo $productModifie['img'] ?>'>
                 </div>
@@ -147,7 +146,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     echo "<option>" . $item["name"] . "</option>";
                                 }
                             }
-                            // 
                             ?>
                         </select>
                     </div>

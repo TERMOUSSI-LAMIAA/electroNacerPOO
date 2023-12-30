@@ -4,7 +4,7 @@ $conn = new PDO('mysql:host=localhost;dbname=electronacerpoo', 'root', '');
 if (isset($_GET['ref'])) {
     $client = $_SESSION['client']["username"];
     $ref = $_GET['ref'];
-    
+
     $stmt = $conn->prepare("SELECT qnt FROM panier WHERE client_username = '$client' AND product_ref = '$ref'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -33,7 +33,6 @@ if (isset($_GET["in_panier"])) {
     } else {
         print_r($result[0]['qnt']);
     }
-
 }
 
 if (isset($_GET["client"]) && isset($_GET["refProduct"]) && isset($_GET["qnt"])) {
@@ -43,7 +42,7 @@ if (isset($_GET["client"]) && isset($_GET["refProduct"]) && isset($_GET["qnt"]))
     if ($qnt > 0) {
         $stmt2 = $conn->prepare("UPDATE panier SET qnt = '$qnt' WHERE client_username = '$client2' AND product_ref = '$ref'");
         $stmt2->execute();
-    } else if ($qnt === 0) {
+    } elseif ($qnt === 0) {
         $stmt2 = $conn->prepare("DELETE FROM panier WHERE client_username = '$client2' AND product_ref = '$ref'");
         $stmt2->execute();
     }

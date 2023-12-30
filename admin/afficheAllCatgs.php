@@ -2,11 +2,10 @@
 include("ajaxConn.php");
 
 if (isset($_SESSION['state'])) {
-
     $stmt = $conn->prepare("SELECT * FROM categories");
     $stmt->execute();
     $catgs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
+    ?>
 
     <!DOCTYPE html>
     <html lang="en">

@@ -1,6 +1,6 @@
 <?php
-require_once('C:\xampp\htdocs\ElectroNacerPoo\Model\connexion.php');
-require_once('C:\xampp\htdocs\ElectroNacerPoo\classes\user.php');
+require_once('Model/connexion.php');
+require_once('classes/user.php');
 
 class UserDAO
 {
@@ -16,7 +16,7 @@ class UserDAO
         $stmt->execute();
         $result = $stmt->fetchAll();
         $users = array();
-        foreach ($result as $row) { 
+        foreach ($result as $row) {
             $users[] = new User($row["email"], $row["username"], $row["pass"], $row["state"], $row["role"]);
         }
         return $users;
@@ -34,7 +34,7 @@ class UserDAO
         $pass = $user->getMdpU();
         $state = $user->getState();
         $role = $user->getRole();
-        
+
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':pass', $pass);
@@ -69,21 +69,21 @@ class UserDAO
                   `state` = :state,
                   `role` = :role
                   WHERE `email` = :email";
-    
-        
-    $stmt = $this->db->prepare($query);
 
-    $email = $user->getEmailU();
-    $username = $user->getLoginU();
-    $pass = $user->getMdpU();
-    $state = $user->getState();
-    $role = $user->getRole();
-    
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':pass', $pass);
-    $stmt->bindParam(':state', $state);
-    $stmt->bindParam(':role', $role);
+
+        $stmt = $this->db->prepare($query);
+
+        $email = $user->getEmailU();
+        $username = $user->getLoginU();
+        $pass = $user->getMdpU();
+        $state = $user->getState();
+        $role = $user->getRole();
+
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':pass', $pass);
+        $stmt->bindParam(':state', $state);
+        $stmt->bindParam(':role', $role);
         try {
             $stmt->execute();
             echo "Record updated successfully.";
@@ -91,10 +91,6 @@ class UserDAO
             throw $e;
         }
     }
-
-
-
-
 }
 
 
@@ -106,8 +102,3 @@ class UserDAO
 // $usr = new User('email@','user1111', 'pas1',1, 0);
 // $usrDAO = new UserDAO();
 // $usrDAO->update_user($usr);
-
-
-
-
-?>

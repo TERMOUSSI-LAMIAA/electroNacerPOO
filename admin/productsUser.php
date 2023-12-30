@@ -2,7 +2,6 @@
 
 try {
     include("ajaxConn.php");
-    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -32,9 +31,7 @@ try {
 
 
 
-    <?php
-    if (count($product) > 0) {
-    ?>
+    <?php if (count($product) > 0) {    ?>
         <div class="select">
             <select id="filter">
                 <option value="0">All</option>

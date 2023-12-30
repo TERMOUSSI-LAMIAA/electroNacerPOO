@@ -8,7 +8,7 @@ class Client
     private $email;
     private $ville;
     private $mdpCl;
-    public function __construct($n,$user,  $em, $mdp, $ad, $vil,$num)
+    public function __construct($n, $user, $em, $mdp, $ad, $vil, $num)
     {
         $this->fullnom = $n;
         $this->username = $user;
@@ -17,10 +17,10 @@ class Client
         $this->adresse = $ad;
         $this->ville = $vil;
         $this->num_phone = $num;
-    } 
-   
-    
-  
+    }
+
+
+
     public function getNum_phone()
     {
         return $this->num_phone;
@@ -28,7 +28,7 @@ class Client
     public function getAdresse()
     {
         return $this->adresse;
-    } 
+    }
     public function getEmail()
     {
         return $this->email;
@@ -50,4 +50,3 @@ class Client
         return $this->username;
     }
 }
-?>

@@ -1,12 +1,11 @@
 <?php
 
-require_once('C:\xampp\htdocs\ElectroNacerPoo\Model\connexion.php');
-require_once('C:\xampp\htdocs\ElectroNacerPoo\DAO\userDAO.php');
+require_once('Model/connexion.php');
+require_once('DAO/userDAO.php');
 
 session_start();
 //echo password_hash("123456",PASSWORD_DEFAULT);
 if (!isset($_SESSION['user'])) {
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
         $pass = $_POST['password'];
@@ -40,8 +39,7 @@ if (!isset($_SESSION['user'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -83,12 +81,8 @@ if (!isset($_SESSION['user'])) {
             </div>
         </div>
 
-        <?php
-    } else {
-
+    <?php } else {
         include("productsUser.php");
-
-
         ?>
         <!-- <script>
         let home =document.getElementById("home");
@@ -98,11 +92,7 @@ if (!isset($_SESSION['user'])) {
 
 
 
-        <?php
-
-    }
-
-    ?>
+    <?php } ?>
 
 
 

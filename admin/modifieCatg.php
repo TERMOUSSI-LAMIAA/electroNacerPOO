@@ -36,8 +36,7 @@ if (isset($_POST["modifie"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <style>
         select {
@@ -106,7 +105,7 @@ if (isset($_POST["modifie"])) {
             var result;
             let myRequest = new XMLHttpRequest();
             myRequest.open("GET", "ajaxConn.php?table=" + tableName, false);
-            myRequest.onreadystatechange = function () {
+            myRequest.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200) {
                     result = JSON.parse(this.responseText);
                 }
@@ -120,7 +119,7 @@ if (isset($_POST["modifie"])) {
         filter.className = 'form-control container';
         filter.style.width = 'fit-content';
         filter.innerHTML = "<option disabled selected>Choose a category</option>";
-        getData("categories").forEach(function (catg, i) {
+        getData("categories").forEach(function(catg, i) {
             filter.innerHTML += `<option value=${i}>${catg['name']}</option>`;
         });
         /* End of Create Filter */
@@ -131,8 +130,8 @@ if (isset($_POST["modifie"])) {
         formContainer.appendChild(filter);
 
         const categories = getData('categories');
-        
-        filter.addEventListener('change', function () {
+
+        filter.addEventListener('change', function() {
 
             formContainer.innerHTML = `
             <div class= 'mb-3 d-flex justify-content-center'>
@@ -168,7 +167,6 @@ if (isset($_POST["modifie"])) {
         });
 
         document.querySelector('.dashboard').appendChild(formContainer);
-
     </script>
 </body>
 

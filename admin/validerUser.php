@@ -6,11 +6,8 @@ $users = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $noValide = $_POST["novlaid"];
     if (isset($_POST["valide"]) && $_POST["valide"] === "Valider") {
-
-
         $sql = "UPDATE users SET state = 1 WHERE username = '$noValide'";
 
         $stmt = $conn->prepare($sql);
@@ -25,11 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt1->execute();
         header("Refresh: 1; url=validerUser.php");
         exit;
-
     }
-
-
-
 }
 
 
@@ -44,8 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <style>

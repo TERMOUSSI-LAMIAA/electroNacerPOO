@@ -21,19 +21,4 @@ class CommandDAO
         }
         return $commandes;
     }
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-?>

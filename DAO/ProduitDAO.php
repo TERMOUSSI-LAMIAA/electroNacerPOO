@@ -1,6 +1,6 @@
 <?php
-require_once('C:\xampp\htdocs\ElectroNacerPoo\Model\connexion.php');
-require_once('C:\xampp\htdocs\ElectroNacerPoo\classes\ProduitClass.php');
+require_once('Model/connexion.php');
+require_once('classes/ProduitClass.php');
 
 class ProduitDAO
 {
@@ -26,9 +26,9 @@ class ProduitDAO
     // {
     //     $query = "INSERT INTO products (`reference`, `etiquette`, `descpt`, `codeBarres`, `img`, `prixAchat`, `prixFinal`, `prixOffre`, `qntMin`, `qntStock`, `catg`) 
     //               VALUES (:reference, :etiquette, :descpt, :codeBarres, :img, :prixAchat, :prixFinal, :prixOffre, :qntMin, :qntStock, :catg)";
-    
+
     //     $stmt = $this->db->prepare($query);
-    
+
     //     $reference = $Product->getRef();
     //     $etiquette = $Product->getEtqt();
     //     $descpt = $Product->getDesc();
@@ -40,7 +40,7 @@ class ProduitDAO
     //     $qntMin = $Product->getQte_min();
     //     $qntStock = $Product->getQte_stock();
     //     $catg = $Product->getCatg();
-    
+
     //     $stmt->bindParam(':reference', $reference);
     //     $stmt->bindParam(':etiquette', $etiquette);
     //     $stmt->bindParam(':descpt', $descpt);
@@ -52,7 +52,7 @@ class ProduitDAO
     //     $stmt->bindParam(':qntMin', $qntMin);
     //     $stmt->bindParam(':qntStock', $qntStock);
     //     $stmt->bindParam(':catg', $catg);
-    
+
     //     try {
     //         $stmt->execute();
     //         echo "Record inserted successfully.";
@@ -83,9 +83,9 @@ class ProduitDAO
     //               `qntStock` = :qntStock,
     //               `catg` = :catg
     //               WHERE `reference` = :reference";
-    
+
     //     $stmt = $this->db->prepare($query);
-    
+
     //     $reference = $Product->getRef();
     //     $etiquette = $Product->getEtqt();
     //     $descpt = $Product->getDesc();
@@ -97,7 +97,7 @@ class ProduitDAO
     //     $qntMin = $Product->getQte_min();
     //     $qntStock = $Product->getQte_stock();
     //     $catg = $Product->getCatg();
-    
+
     //     $stmt->bindParam(':reference', $reference);
     //     $stmt->bindParam(':etiquette', $etiquette);
     //     $stmt->bindParam(':descpt', $descpt);
@@ -109,7 +109,7 @@ class ProduitDAO
     //     $stmt->bindParam(':qntMin', $qntMin);
     //     $stmt->bindParam(':qntStock', $qntStock);
     //     $stmt->bindParam(':catg', $catg);
-    
+
     //     try {
     //         $stmt->execute();
     //         echo "Record updated successfully.";
@@ -118,8 +118,8 @@ class ProduitDAO
     //     }
     // }
     public function update_product($ref, $title, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $catg, $img)
-{
-    $query = "UPDATE `products` SET 
+    {
+        $query = "UPDATE `products` SET 
               `etiquette` = :title, 
               `descpt` = :desc,
               `prixAchat` = :prixAchat,
@@ -128,43 +128,43 @@ class ProduitDAO
               `qntStock` = :qntStock,
               `catg` = :catg";
 
-    // If an image is provided, include it in the update
-    if (!empty($img)) {
-        $query .= ", `img` = :img";
+        // If an image is provided, include it in the update
+        if (!empty($img)) {
+            $query .= ", `img` = :img";
+        }
+
+        $query .= " WHERE `codeBarres` = :ref";
+
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindParam(':ref', $ref);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':desc', $desc);
+        $stmt->bindParam(':prixAchat', $prixAchat);
+        $stmt->bindParam(':prixFinal', $prixFinal);
+        $stmt->bindParam(':qntMin', $qntMin);
+        $stmt->bindParam(':qntStock', $qntStock);
+        $stmt->bindParam(':catg', $catg);
+
+        // If an image is provided, bind its value
+        if (!empty($img)) {
+            $stmt->bindParam(':img', $img);
+        }
+
+        try {
+            $stmt->execute();
+            echo "Record updated successfully.";
+        } catch (PDOException $e) {
+            throw $e;
+        }
     }
-
-    $query .= " WHERE `codeBarres` = :ref";
-
-    $stmt = $this->db->prepare($query);
-
-    $stmt->bindParam(':ref', $ref);
-    $stmt->bindParam(':title', $title);
-    $stmt->bindParam(':desc', $desc);
-    $stmt->bindParam(':prixAchat', $prixAchat);
-    $stmt->bindParam(':prixFinal', $prixFinal);
-    $stmt->bindParam(':qntMin', $qntMin);
-    $stmt->bindParam(':qntStock', $qntStock);
-    $stmt->bindParam(':catg', $catg);
-
-    // If an image is provided, bind its value
-    if (!empty($img)) {
-        $stmt->bindParam(':img', $img);
-    }
-
-    try {
-        $stmt->execute();
-        echo "Record updated successfully.";
-    } catch (PDOException $e) {
-        throw $e;
-    }
-}
     // public function delete_product($id)
     // {
     //     $query = "UPDATE `products` SET `isHide` = 1 WHERE `reference` = :id";
     //     $stmt = $this->db->prepare($query);
-    
+
     //     $stmt->bindParam(':id', $id);
-    
+
     //     try {
     //         $stmt->execute();
     //         echo "Record deleted successfully.";
@@ -178,11 +178,11 @@ class ProduitDAO
             $sql = "UPDATE products
                     SET isHide = 1
                     WHERE etiquette = :etiquette";
-            
+
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':etiquette', $etiquette);
             $stmt->execute();
-            
+
             return true; // Success
         } catch (PDOException $e) {
             // Handle the exception or log the error
@@ -203,4 +203,3 @@ class ProduitDAO
 // $prDAO = new ProduitDAO();
 // $prDAO->delete_product(39);
 // echo 'in';
-?>

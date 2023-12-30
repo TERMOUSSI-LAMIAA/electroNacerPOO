@@ -1,5 +1,5 @@
 <?php
-require_once 'C:\xampp\htdocs\ElectroNacerPoo\Model\db_config.php';
+require_once 'Model/db_config.php';
 
 class Database
 {
@@ -17,13 +17,10 @@ class Database
         if (!self::$instance) {
             self::$instance = new Database();
         }
-        return self::$instance; 
+        return self::$instance;
     }
     public function getConnection()
     {
         return $this->connection;
     }
-
 }
-
-?>

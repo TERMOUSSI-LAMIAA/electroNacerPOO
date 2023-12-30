@@ -1,6 +1,6 @@
 <?php
-require_once('C:\xampp\htdocs\ElectroNacerPoo\Model\connexion.php');
-require_once('C:\xampp\htdocs\ElectroNacerPoo\classes\client.php');
+require_once('Model/connexion.php');
+require_once('classes/client.php');
 
 class ClientDAO
 {
@@ -99,10 +99,6 @@ class ClientDAO
             throw $e;
         }
     }
-
-
-
-
 }
 //insert
 // $clnt = new Client('fullname1','us1', 'email@','pas1','adr1','vil1','0652124587');
@@ -112,9 +108,3 @@ class ClientDAO
 // $clnt = new Client('fullname71', 'us1', 'email@gmil.com', 'passss1', 'adr1', 'vil1', '0652124587');
 // $clntDAO = new ClientDAO();
 // $clntDAO->update_client($clnt);
-
-
-
-
-
-?>

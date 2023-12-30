@@ -1,6 +1,6 @@
 <?php
-require_once('C:\xampp\htdocs\ElectroNacerPoo\Model\connexion.php');
-require_once('C:\xampp\htdocs\ElectroNacerPoo\classes\categorie.php');
+require_once('Model/connexion.php');
+require_once('classes/categorie.php');
 
 class CategorieDAO
 {
@@ -41,7 +41,7 @@ class CategorieDAO
     //     }
     //     return $categories;
     // }
- 
+
     public function insert_category($catg)
     {
         $query = "INSERT INTO   categories (`name`, `descrt`, `img`)
@@ -52,7 +52,7 @@ class CategorieDAO
         $name = $catg->getNomCat();
         $desc = $catg->getDesc();
         $img = $catg->getPhotoCat();
-        
+
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':descrt', $desc);
         $stmt->bindParam(':img', $img);
@@ -70,16 +70,16 @@ class CategorieDAO
                   `descrt` = :descrt, 
                   `img` = :img
                   WHERE `name` = :name";
-           $stmt = $this->db->prepare($query);
+        $stmt = $this->db->prepare($query);
 
-           $name = $catg->getNomCat();
-           $desc = $catg->getDesc();
-           $img = $catg->getPhotoCat();
-           
-           $stmt->bindParam(':name', $name);
-           $stmt->bindParam(':descrt', $desc);
-           $stmt->bindParam(':img', $img);
-        
+        $name = $catg->getNomCat();
+        $desc = $catg->getDesc();
+        $img = $catg->getPhotoCat();
+
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':descrt', $desc);
+        $stmt->bindParam(':img', $img);
+
         try {
             $stmt->execute();
             echo "Record updated successfully.";
@@ -92,9 +92,9 @@ class CategorieDAO
     {
         $query = "UPDATE categories SET `isHide` = 1 WHERE `name` = :name";
         $stmt = $this->db->prepare($query);
-    
+
         $stmt->bindParam(':name', $name);
-    
+
         try {
             $stmt->execute();
             echo "Record deleted successfully.";
@@ -102,9 +102,6 @@ class CategorieDAO
             throw $e;
         }
     }
-
-
-
 }
 
 //insert
@@ -121,4 +118,3 @@ class CategorieDAO
 
 
 // echo'in';
-?>

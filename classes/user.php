@@ -1,5 +1,6 @@
 <?php
-class User{
+class User
+{
     private $emailU;
     private $loginU;
     private $mdpU;
@@ -13,7 +14,7 @@ class User{
         $this->state = $st;
         $this->role = $rol;
     }
-    public function getEmailU() 
+    public function getEmailU()
     {
         return $this->emailU;
     }
@@ -34,4 +35,3 @@ class User{
         return $this->role;
     }
 }
-?>

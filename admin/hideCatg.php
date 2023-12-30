@@ -3,7 +3,6 @@ include("ajaxConn.php");
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $hideCatg = $_POST["hided"];
 
     $stmt3 = $conn->prepare("UPDATE categories SET isHide = 1 WHERE name = '$hideCatg'");
@@ -23,8 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -62,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </form>
             <?php } else {
                 echo "<p class='all-valid bg-warning'>Tous les categories sont masqué.</p>";
-
             }
             ?>
         </div>

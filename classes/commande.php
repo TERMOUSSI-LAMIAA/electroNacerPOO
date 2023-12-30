@@ -15,7 +15,7 @@ class Commande
         $this->livDate = $ld;
         $this->totPrice = $tot;
         $this->clntUsername = $Clname;
-    } 
+    }
     public function getIdCmd()
     {
         return $this->idCmd;
@@ -41,4 +41,3 @@ class Commande
         return $this->clntUsername;
     }
 }
-?>
