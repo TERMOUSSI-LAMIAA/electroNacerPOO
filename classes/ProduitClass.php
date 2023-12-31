@@ -36,19 +36,19 @@ class Produit
     {
         return $this->etqt;
     }
-    public function getCode_barre()
+    public function getCodeBarre()
     {
         return $this->code_barre;
     }
-    public function getPr_ach()
+    public function getPrAch()
     {
         return $this->pr_ach;
     }
-    public function getPr_fin()
+    public function getPrFin()
     {
         return $this->pr_fin;
     }
-    public function getOffre_pr()
+    public function getOffrePr()
     {
         return $this->offre_pr;
     }
@@ -56,11 +56,11 @@ class Produit
     {
         return $this->desc;
     }
-    public function getQte_min()
+    public function getQteMin()
     {
         return $this->qte_min;
     }
-    public function getQte_stock()
+    public function getQteStock()
     {
         return $this->qte_stock;
     }

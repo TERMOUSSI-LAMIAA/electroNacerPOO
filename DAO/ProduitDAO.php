@@ -32,13 +32,13 @@ class ProduitDAO
     //     $reference = $Product->getRef();
     //     $etiquette = $Product->getEtqt();
     //     $descpt = $Product->getDesc();
-    //     $codeBarres = $Product->getCode_barre();
+    //     $codeBarres = $Product->getCodeBarre();
     //     $img = $Product->getImgProd();
-    //     $prixAchat = $Product->getPr_ach();
-    //     $prixFinal = $Product->getPr_fin();
-    //     $prixOffre = $Product->getOffre_pr();
-    //     $qntMin = $Product->getQte_min();
-    //     $qntStock = $Product->getQte_stock();
+    //     $prixAchat = $Product->getPrAch();
+    //     $prixFinal = $Product->getPrFin();
+    //     $prixOffre = $Product->getOffrePr();
+    //     $qntMin = $Product->getQteMin();
+    //     $qntStock = $Product->getQteStock();
     //     $catg = $Product->getCatg();
 
     //     $stmt->bindParam(':reference', $reference);
@@ -69,7 +69,7 @@ class ProduitDAO
 
         move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6v2\admin\assets\images\\' . $_FILES['img']['name']);
     }
-    // public function update_product($Product)
+    // public function updateProduct($Product)
     // {
     //     $query = "UPDATE `products` SET 
     //               `etiquette` = :etiquette, 
@@ -89,13 +89,13 @@ class ProduitDAO
     //     $reference = $Product->getRef();
     //     $etiquette = $Product->getEtqt();
     //     $descpt = $Product->getDesc();
-    //     $codeBarres = $Product->getCode_barre();
+    //     $codeBarres = $Product->getCodeBarre();
     //     $img = $Product->getImgProd();
-    //     $prixAchat = $Product->getPr_ach();
-    //     $prixFinal = $Product->getPr_fin();
-    //     $prixOffre = $Product->getOffre_pr();
-    //     $qntMin = $Product->getQte_min();
-    //     $qntStock = $Product->getQte_stock();
+    //     $prixAchat = $Product->getPrAch();
+    //     $prixFinal = $Product->getPrFin();
+    //     $prixOffre = $Product->getOffrePr();
+    //     $qntMin = $Product->getQteMin();
+    //     $qntStock = $Product->getQteStock();
     //     $catg = $Product->getCatg();
 
     //     $stmt->bindParam(':reference', $reference);
@@ -117,7 +117,7 @@ class ProduitDAO
     //         throw $e;
     //     }
     // }
-    public function update_product($ref, $title, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $catg, $img)
+    public function updateProduct($ref, $title, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $catg, $img)
     {
         $query = "UPDATE `products` SET 
               `etiquette` = :title, 
@@ -198,7 +198,7 @@ class ProduitDAO
 //updt
 // $pr=new Produit(40,'produit1', '8565265', 200, 400, 350, 'desc1111', 5, 70, 'img1/', 'Robot');
 // $prDAO = new ProduitDAO();
-// $prDAO->update_product($pr);
+// $prDAO->updateProduct($pr);
 //delete
 // $prDAO = new ProduitDAO();
 // $prDAO->delete_product(39);

@@ -227,7 +227,7 @@ $nbrOfPanier = 0;
                                                         <?php echo $product->getEtqt(); ?>
                                                     </a></h3>
                                                 <h4 class="product-price">
-                                                    <?php echo "$" . number_format($product->getOffre_pr(), 2); ?>
+                                                    <?php echo "$" . number_format($product->getOffrePr(), 2); ?>
                                                 </h4>
                                                 <div class="product-rating">
                                                     <i class="fa fa-star"></i>
@@ -236,7 +236,7 @@ $nbrOfPanier = 0;
                                                     <i class="fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
                                                 </div>
-                                            <!-- <div class="product-btns">
+                                                <!-- <div class="product-btns">
                                                     <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
                                                     <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
                                                     <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>

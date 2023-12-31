@@ -36,7 +36,7 @@ class ClientDAO
         }
     }
 
-    public function insert_client($clnt)
+    public function insertClient($clnt)
     {
         $query = "INSERT INTO  `clients`(`full_name`, `username`, `email`, `password`, `adresse`, `ville`, `phone`) VALUES (:full_name, :username,:email,:password,:adresse,:ville,:phone)";
 
@@ -48,7 +48,7 @@ class ClientDAO
         $password = $clnt->getMdpCl();
         $adresse = $clnt->getAdresse();
         $ville = $clnt->getVille();
-        $phone = $clnt->getNum_phone();
+        $phone = $clnt->getNumPhone();
 
         $stmt->bindParam(':full_name', $full_name);
         $stmt->bindParam(':username', $username);
@@ -64,7 +64,7 @@ class ClientDAO
             throw $e;
         }
     }
-    public function update_client($clnt)
+    public function updateClient($clnt)
     {
         $query = "UPDATE clients SET 
                   `full_name` = :full_name, 
@@ -83,7 +83,7 @@ class ClientDAO
         $pass = $clnt->getMdpCl();
         $adresse = $clnt->getAdresse();
         $ville = $clnt->getVille();
-        $phone = $clnt->getNum_phone();
+        $phone = $clnt->getNumPhone();
 
         $stmt->bindParam(':full_name', $full_name);
         $stmt->bindParam(':username', $username);
@@ -103,8 +103,8 @@ class ClientDAO
 //insert
 // $clnt = new Client('fullname1','us1', 'email@','pas1','adr1','vil1','0652124587');
 // $clntDAO = new ClientDAO();
-// $clntDAO->insert_client($clnt);
+// $clntDAO->insertClient($clnt);
 //updt
 // $clnt = new Client('fullname71', 'us1', 'email@gmil.com', 'passss1', 'adr1', 'vil1', '0652124587');
 // $clntDAO = new ClientDAO();
-// $clntDAO->update_client($clnt);
+// $clntDAO->updateClient($clnt);

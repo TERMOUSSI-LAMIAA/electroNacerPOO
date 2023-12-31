@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             move_uploaded_file($_FILES['img']['tmp_name'], 'C:/xampp/htdocs/brief6v2/assets/images//' . $_FILES['img']['name']);
         }
 
-        $productUpdate->update_product($ref, $title, $prixAchat, $prixFinal, $desc, $qnt_min, $qnt_stock, $catg, $img);
+        $productUpdate->updateProduct($ref, $title, $prixAchat, $prixFinal, $desc, $qnt_min, $qnt_stock, $catg, $img);
 
         setcookie("ref", "", time() - 1);
         header("Location: modifierProduct.php");
@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                ?>
+            ?>
                 <div class="mb-3 d-flex justify-content-center">
                     <img class="my-5" src='<?php echo $productModifie['img'] ?>'>
                 </div>

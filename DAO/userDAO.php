@@ -22,7 +22,7 @@ class UserDAO
         return $users;
     }
 
-    public function insert_user($user)
+    public function insertUser($user)
     {
         $query = "INSERT INTO `users`(`email`, `username`, `pass`, `state`, `role`)
                 VALUES (:email, :username,:pass,:state,:role)";
@@ -61,7 +61,7 @@ class UserDAO
             return null;
         }
     }
-    public function update_user($user)
+    public function updateUser($user)
     {
         $query = "UPDATE `users` SET 
                   `username` = :username,
@@ -97,8 +97,8 @@ class UserDAO
 //insert
 // $usr = new User('email@','user1', 'pas1',0, 0);
 // $usrDAO = new UserDAO();
-// $usrDAO->insert_user($usr);
+// $usrDAO->insertUser($usr);
 //updt
 // $usr = new User('email@','user1111', 'pas1',1, 0);
 // $usrDAO = new UserDAO();
-// $usrDAO->update_user($usr);
+// $usrDAO->updateUser($usr);

@@ -42,7 +42,7 @@ class CategorieDAO
     //     return $categories;
     // }
 
-    public function insert_category($catg)
+    public function insertCategory($catg)
     {
         $query = "INSERT INTO   categories (`name`, `descrt`, `img`)
                 VALUES (:name, :descrt,:img)";
@@ -64,7 +64,7 @@ class CategorieDAO
         }
     }
 
-    public function update_category($catg)
+    public function updateCategory($catg)
     {
         $query = "UPDATE categories SET 
                   `descrt` = :descrt, 
@@ -88,7 +88,7 @@ class CategorieDAO
         }
     }
 
-    public function delete_category($name)
+    public function deleteCategory($name)
     {
         $query = "UPDATE categories SET `isHide` = 1 WHERE `name` = :name";
         $stmt = $this->db->prepare($query);
@@ -107,14 +107,14 @@ class CategorieDAO
 //insert
 // $cat = new Categorie('catname','desccc', 'img/');
 // $catDAO = new CategorieDAO();
-// $catDAO->insert_category($cat);
+// $catDAO->insertCategory($cat);
 //updt
 // $cat= new Categorie('catname','descccnew', 'img1/');
 // $catDAO = new CategorieDAO();
-// $catDAO->update_category($cat);
+// $catDAO->updateCategory($cat);
 //delete
 // $catDAO = new CategorieDAO();
-// $catDAO->delete_category('catname');
+// $catDAO->deleteCategory('catname');
 
 
 // echo'in';

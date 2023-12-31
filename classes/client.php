@@ -21,7 +21,7 @@ class Client
 
 
 
-    public function getNum_phone()
+    public function getNumPhone()
     {
         return $this->num_phone;
     }
