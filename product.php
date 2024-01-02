@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("Model/connexion.php");
-include("DAO/ProduitDAO.php");
-include("DAO/categorieDAO.php");
+require_once(dirname(__FILE__) . '/DAO/ProduitDAO.php');
+require_once(dirname(__FILE__) . '/DAO/categorieDAO.php');
+require_once(dirname(__FILE__) . '/DAO/clientDAO.php');
 // include("client");
 
 $productObj = new ProduitDAO();
@@ -10,15 +10,11 @@ $products = $productObj->getProduit();
 
 $categoryObj = new CategorieDAO();
 $catgs = $categoryObj->getCategorie();
-$conn = Database::getInstance()->getConnection();
 $nbrOfPanier = 0;
 if (isset($_SESSION["client"])) {
     $client = $_SESSION["client"]["username"];
-    $stmt = $conn->prepare("SELECT SUM(qnt) as card_count FROM panier WHERE client_username = '$client'");
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $nbrOfPanier = $result[0]["card_count"];
+    $clientDAO = new ClientDAO();
+    $nbrOfPanier = $clientDAO->countCartItems($client);
 }
 ?>
 
@@ -268,6 +264,8 @@ if (isset($_SESSION["client"])) {
     <script src="js/main.js"></script>
 
     <script>
+        var productList = [];
+
         let menu = document.getElementById('menu-product');
         let listCatg = document.querySelectorAll('.li-padding');
         listCatg[0].style.color = '#D10024';
@@ -279,114 +277,83 @@ if (isset($_SESSION["client"])) {
             return result;
         }
 
-        function displayProducts(object) {
-            let name = object['etiquette'];
-            let ref = Number(object['reference']);
+        function displayProducts(product) {
+            let name = product.etqt;
+            let ref = Number(product.ref);
             let firstDiv = document.createElement('div');
             firstDiv.className = 'col-md-3 col-xs-6';
             firstDiv.innerHTML = `
-    <div class="product">
-        <div class="product-img">
-            <img src="admin/${object['img']}" alt="">
-            <div class="product-label">
-                        <span class="sale">-${(object['prixFinal'] - object['prixOffre']) / object['prixFinal'] * 100}%</span>
-            </div>
-        </div>
-        
-        <div class="product-body">
-            <p class="product-category">${object['catg']}</p>
-            <h3 class="product-name"><a href="productPage.php?ref=${object['reference']}">${name}</a></h3>
-            <h4 class="product-price">${object['prixOffre']}DH <del class="product-old-price">${object['prixFinal']}DH</del></h4>
-            <div class="product-rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-        </div>
-        <div class="add-to-cart">
-            <button class="add-to-cart-btn" onclick="addToCart(${ref})">add to cart</button>
-        </div>
-    </div>
-`;
-            menu.appendChild(firstDiv);
-        }
-
-
-
-        getData("products").then(products => {
-            console.log("getDataCalled");
-
-
-
-
-            products.forEach(function(pro) {
-                displayProducts(pro);
-            });
-
-            listCatg.forEach(function(catg) {
-
-                catg.addEventListener('click', function() {
-                    listCatg.forEach(function(c) {
-                        c.style.color = 'black';
-                    });
-                    document.getElementById('title-catg').innerText = catg.textContent;
-                    catg.style.color = '#D10024';
-                    menu.innerHTML = `
-        <div class="col-md-12">
-            <div class="section-title text-center">
-                <h3 class="title" id="title-catg">${catg.textContent}</h3>
-            </div>
-        </div>
-    `;
-                    if (catg.textContent === 'All Products') {
-                        products.forEach(function(pro) {
-                            displayProducts(pro);
-                        });
-                    } else {
-                        products.forEach(function(pro) {
-                            // console.log(catg.textContent);
-                            // console.log();
-                            if (pro['catg'] === catg.textContent) displayProducts(pro);
-                        });
-                    }
-                });
-            });
-
-
-            /* Search of Products */
-            let search = document.getElementById('search-input');
-            search.addEventListener('keyup', function() {
-
-                let myRequest = new XMLHttpRequest();
-                myRequest.open("GET", "admin/ajaxConn.php?liveSearch=" + search.value, true);
-                myRequest.onreadystatechange = function() {
-                    if (this.readyState === 4 && this.status === 200) {
-                        // result = JSON.parse(this.responseText);
-                        if (this.responseText != "") {
-                            menu.innerHTML = '';
-                            JSON.parse(this.responseText).forEach(function(pro) {
-                                displayProducts(pro);
-                            });
-                        } else {
-                            menu.innerHTML = `
-                <div class="col-md-12">
-                    <div class="section-title text-center">
-                        <h3 class="title" id="title-catg">ALl Products</h3>
+                <div class="product">
+                    <div class="product-img">
+                        <img src="admin/${product.imgProd}" alt="">
+                        <div class="product-label">
+                            <span class="sale">-${(product.prFin - product.offrePr) / product.prFin * 100}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-body">
+                        <p class="product-category">${product.catg}</p>
+                        <h3 class="product-name"><a href="productPage.php?ref=${product.ref}">${name}</a></h3>
+                        <h4 class="product-price">${product.prFin}DH 
+                            <del class="product-old-price">${product.prFin}DH</del>
+                        </h4>
+                        <div class="product-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn" onclick="addToCart(${ref})">add to cart</button>
                     </div>
                 </div>
             `;
-                            products.forEach(function(pro) {
-                                displayProducts(pro);
-                            });
-                        }
+            menu.appendChild(firstDiv);
+        }
 
-                    }
+        listCatg.forEach(function(catg) {
+
+            catg.addEventListener('click', function() {
+                let catName = catg.textContent.trim();
+                listCatg.forEach(function(c) {
+                    c.style.color = 'black';
+                });
+                document.getElementById('title-catg').innerText = catName;
+                catg.style.color = '#D10024';
+                menu.innerHTML = `
+                    <div class="col-md-12">
+                        <div class="section-title text-center">
+                            <h3 class="title" id="title-catg">${catName}</h3>
+                        </div>
+                    </div>
+                `;
+                if (catName === 'All Products') {
+                    productList.forEach(function(pro) {
+                        displayProducts(pro);
+                    });
+                } else {
+                    productList.forEach(function(pro) {
+                        console.log(catName, pro.catg, (pro.catg === catName));
+                        if (pro.catg === catName) displayProducts(pro);
+                    });
                 }
-                myRequest.send();
             });
-            /* End Search of Products */
+        });
+
+
+        getData("products").then(products => {
+            productList = products;
+
+            productList.forEach(function(product) {
+                displayProducts(product);
+            });
+
+
+
+
+
 
             /* Pagination */
             let itemsPerPage = 6;
@@ -403,12 +370,12 @@ if (isset($_SESSION["client"])) {
             allList.forEach(function(oneList) {
                 oneList.addEventListener('click', function() {
                     menu.innerHTML = `
-                <div class="col-md-12">
-                    <div class="section-title text-center">
-                        <h3 class="title" id="title-catg">ALl Products</h3>
-                    </div>
-                </div>
-    `;
+                            <div class="col-md-12">
+                                <div class="section-title text-center">
+                                    <h3 class="title" id="title-catg">ALl Products</h3>
+                                </div>
+                            </div>
+                        `;
                     for (let i = itemsPerPage * (Number(oneList.textContent) - 1); i < itemsPerPage * (Number(oneList.textContent)); i++) {
                         displayProducts(products[i]);
                     }
@@ -418,27 +385,55 @@ if (isset($_SESSION["client"])) {
 
 
             /* End Of Pagination */
+        }).catch(error => {
+            console.log("Error fetching data:", error);
         });
 
 
+        /* Search of Products */
+        let search = document.getElementById('search-input');
+        search.addEventListener('keyup', function() {
 
-
-        /* Add To Cart */
-
-        function addToCart(ref) {
             let myRequest = new XMLHttpRequest();
-            myRequest.open("GET", "ajax.php?ref=" + ref, true);
+            myRequest.open("GET", "admin/ajaxConn.php?liveSearch=" + search.value, true);
             myRequest.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200) {
-                    //console.log(this.responseText);
-
-                    let count = Number(document.querySelector("#panier > div.qty").innerText)
-                    count++;
-                    document.querySelector("#panier > div.qty").innerHTML = count;
+                    // result = JSON.parse(this.responseText);
+                    if (this.responseText != "") {
+                        menu.innerHTML = '';
+                        JSON.parse(this.responseText).forEach(function(pro) {
+                            displayProducts(pro);
+                        });
+                    } else {
+                        menu.innerHTML = `
+                                <div class="col-md-12">
+                                    <div class="section-title text-center">
+                                        <h3 class="title" id="title-catg">ALl Products</h3>
+                                    </div>
+                                </div>
+                            `;
+                        products.forEach(function(pro) {
+                            displayProducts(pro);
+                        });
+                    }
 
                 }
             }
             myRequest.send();
+        });
+        /* End Search of Products */
+
+        /* Add To Cart */
+
+        function addToCart(ref) {
+
+            $.get(`ajax.php?action=addToCart&ref=${ref}`, function(data) {
+                    document.querySelector("#panier > div.qty").innerHTML = data.count;
+
+                }, "json")
+                .fail(function() {
+                    console.log("error");
+                });
         }
 
         let addToCartBtn = document.querySelectorAll('.add-to-cart-btn');

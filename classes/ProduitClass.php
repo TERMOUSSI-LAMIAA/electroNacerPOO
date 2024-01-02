@@ -1,5 +1,5 @@
 <?php
-class Produit
+class Produit implements JsonSerializable
 {
     private $ref;
     private $etqt;
@@ -11,7 +11,7 @@ class Produit
     private $qte_min;
     private $qte_stock;
     private $imgProd;
-    private $Catg;
+    private $catg;
 
     public function __construct($r, $et, $cdbr, $pa, $pf, $ofp, $des, $qmin, $qst, $img, $cat)
     {
@@ -25,7 +25,7 @@ class Produit
         $this->qte_min = $qmin;
         $this->qte_stock = $qst;
         $this->imgProd = $img;
-        $this->Catg = $cat;
+        $this->catg = $cat;
     }
 
     public function getRef()
@@ -70,6 +70,23 @@ class Produit
     }
     public function getCatg()
     {
-        return $this->Catg;
+        return $this->catg;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'ref' => $this->getRef(),
+            'etqt' => $this->getEtqt(),
+            'codeBarre' => $this->getCodeBarre(),
+            'prAch' => $this->getPrAch(),
+            'prFin' => $this->getPrFin(),
+            'offrePr' => $this->getOffrePr(),
+            'desc' => $this->getDesc(),
+            'qteMin' => $this->getQteMin(),
+            'qteStock' => $this->getQteStock(),
+            'imgProd' => $this->getImgProd(),
+            'catg' => $this->getCatg(),
+        ];
     }
 }

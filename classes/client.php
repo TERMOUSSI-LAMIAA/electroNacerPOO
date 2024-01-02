@@ -8,7 +8,8 @@ class Client
     private $email;
     private $ville;
     private $mdpCl;
-    public function __construct($n, $user, $em, $mdp, $ad, $vil, $num)
+    private $isValid;
+    public function __construct($n, $user, $em, $mdp, $ad, $vil, $num, $valid)
     {
         $this->fullnom = $n;
         $this->username = $user;
@@ -17,6 +18,7 @@ class Client
         $this->adresse = $ad;
         $this->ville = $vil;
         $this->num_phone = $num;
+        $this->isValid = $valid;
     }
 
 
@@ -48,5 +50,16 @@ class Client
     public function getUsername()
     {
         return $this->username;
+    }
+
+
+
+
+    /**
+     * Get the value of isValid
+     */
+    public function getIsValid()
+    {
+        return $this->isValid;
     }
 }

@@ -1,20 +1,21 @@
 <?php
+session_start();
+require_once(dirname(__FILE__) . '/../DAO/categorieDAO.php');
+require_once(dirname(__FILE__) . '/../classes/categorie.php');
 
-include("ajaxConn.php");
-if (isset($_SESSION['state'])) {
+if (isset($_SESSION['user']['state'])) {
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         for ($i = 1; $i <= 10; $i++) {
-            if (isset($_POST["name" . $i])) {
-                $name = $_POST["name" . $i];
-                $desc = $_POST["desc" . $i];
+            if (isset($_POST["name" . $i])) { 
                 $img = "assets/catgImages/" . $_FILES["img" . $i]['name'];
-                $stmt = $conn->prepare("INSERT INTO 
-                    categories(name, descrt, img)
-                    VALUES (?, ?, ?)");
-                $stmt->execute([$name, $desc, $img]);
-                move_uploaded_file($_FILES["img" . $i]['tmp_name'], 'C:\xampp\htdocs\brief6v2\assets\catgImages\\' . $_FILES["img" . $i]['name']);
+
+                $categorieDAO =new CategorieDAO();
+                $categorieDAO->insertCategory(
+                    new Categorie($_POST["name" . $i],$_POST["desc" . $i],$img)
+                );
+                move_uploaded_file($_FILES["img" . $i]['tmp_name'],  dirname(__FILE__).'\assets\images\\'  . $_FILES["img" . $i]['name']);
             }
         }
     }

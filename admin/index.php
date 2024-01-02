@@ -1,9 +1,10 @@
 <?php
 
-require_once('Model/connexion.php');
-require_once('DAO/userDAO.php');
+require_once(dirname(__FILE__) . '/../Model/connexion.php');
+require_once(dirname(__FILE__) . '/../DAO/userDAO.php');
 
 session_start();
+
 //echo password_hash("123456",PASSWORD_DEFAULT);
 if (!isset($_SESSION['user'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,6 +17,7 @@ if (!isset($_SESSION['user'])) {
             $_SESSION["user"]["email"] = $user->getEmailU();
             $_SESSION["user"]["username"] = $user->getLoginU();
             $_SESSION["user"]["role"] = $user->getRole();
+            $_SESSION["user"]["state"] = $user->getState();
             header("Location: validatMessage.php");
             exit;
         } else {
@@ -26,7 +28,7 @@ if (!isset($_SESSION['user'])) {
         }
     }
 } else {
-    header('Location: index.php');
+    header('Location: dashboard.php');
     exit;
 }
 ?>
@@ -83,7 +85,7 @@ if (!isset($_SESSION['user'])) {
 
     <?php } else {
         include("productsUser.php");
-        ?>
+    ?>
         <!-- <script>
         let home =document.getElementById("home");
         home.setAttribute("href", "google.com");

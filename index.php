@@ -3,6 +3,7 @@ session_start();
 include("Model/connexion.php");
 include("DAO/ProduitDAO.php");
 include("DAO/categorieDAO.php");
+include("DAO/clientDAO.php");
 // include(client);
 
 $productObj = new ProduitDAO();
@@ -12,7 +13,12 @@ $categoryObj = new CategorieDAO();
 $catgs = $categoryObj->getCategorie();
 
 $nbrOfPanier = 0;
-
+$nbrOfPanier = 0;
+if (isset($_SESSION["client"])) {
+    $client = $_SESSION["client"]["username"];
+    $clientDAO = new ClientDAO();
+    $nbrOfPanier = $clientDAO->countCartItems($client);
+}
 ?>
 
 <!DOCTYPE html>
@@ -243,7 +249,7 @@ $nbrOfPanier = 0;
                                                 </div> -->
                                             </div>
                                             <div class="add-to-cart">
-                                                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add
+                                                <button class="add-to-cart-btn" onclick="addToCart(`<?= $product->getRef() ?>`)"><i class="fa fa-shopping-cart"></i> add
                                                     to cart</button>
                                             </div>
                                         </div>
@@ -392,6 +398,20 @@ $nbrOfPanier = 0;
     <script src="js/nouislider.min.js"></script>
     <script src="js/jquery.zoom.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        /* Add To Cart */
+
+        function addToCart(ref) {
+
+            $.get(`ajax.php?action=addToCart&ref=${ref}`, function(data) {
+                    document.querySelector("#panier > div.qty").innerHTML = data.count;
+
+                }, "json")
+                .fail(function() {
+                    console.log("error");
+                });
+        }
+    </script>
 
 </body>
 

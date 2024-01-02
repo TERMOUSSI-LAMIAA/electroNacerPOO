@@ -1,5 +1,5 @@
 <?php
-class Categorie
+class Categorie implements JsonSerializable
 {
     private $nomCat;
     private $desc;
@@ -21,5 +21,15 @@ class Categorie
     public function getPhotoCat()
     {
         return $this->photoCat;
+    }
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'nomCat' => $this->getNomCat(),
+            'desc' => $this->getDesc(),
+            'photoCat' => $this->getPhotoCat(),
+        ];
     }
 }

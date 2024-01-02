@@ -1,6 +1,6 @@
 <?php
-require_once('Model/connexion.php');
-require_once('classes/categorie.php');
+require_once(dirname(__FILE__) . '/../Model/connexion.php');
+require_once(dirname(__FILE__) . '/../classes/categorie.php');
 
 class CategorieDAO
 {

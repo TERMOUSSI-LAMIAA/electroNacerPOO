@@ -1,55 +1,75 @@
 <?php
-session_start();
-require_once 'DAO/categorieDAO.php';
-$conn = new PDO('mysql:host=localhost;dbname=brief7', 'root', '');
+require_once(dirname(__FILE__) . '/../DAO/categorieDAO.php');
+require_once(dirname(__FILE__) . '/../DAO/userDAO.php');
+require_once(dirname(__FILE__) . '/../DAO/ProduitDAO.php');
+require_once(dirname(__FILE__) . '/../DAO/clientDAO.php');
 
-// $stmt = $conn->prepare('SELECT * FROM categories WHERE isHide = 0');
-// $stmt->execute();
-// $catgs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$cat = new CategorieDAO();
-$catgs = $cat->getCategorie();
 
-$stmt1 = $conn->prepare('SELECT * FROM products WHERE isHide = 0');
-$stmt1->execute();
-$product = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+function getProducts()
+{
+    $produitDAO = new ProduitDAO();
+    return json_encode($produitDAO->getProduits());
+}
 
-$stmt2 = $conn->prepare("SELECT * FROM users");
-$stmt2->execute();
-$users = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-$categories = json_encode($catgs);
-$products = json_encode($product);
+function getCategories()
+{
+    $categorieDAO = new CategorieDAO();
+    return json_encode($categorieDAO->getCategorie());
+}
 
+
+function getUsers()
+{
+    $userDAO = new UserDAO();
+    return json_encode($userDAO->getUser());
+}
+
+function updateValidClient($username, $valid)
+{
+    (new ClientDAO())->updateClientValid($username, $valid);
+}
+
+
+function search($search)
+{
+    $produitDAO = new ProduitDAO();
+    return json_encode($produitDAO->getProduitsByEtiquette($search));
+}
 
 if (isset($_GET['table'])) {
     $table = $_GET['table'];
     //echo $$str;
     switch ($table) {
         case 'products':
-            echo $products;
+            echo getProducts();
             break;
+
         case 'categories':
-            echo $categories;
+            echo getCategories();
             break;
 
         default:
-            # code...
+            echo "[]";
             break;
     }
 }
 
 if (isset($_GET['liveSearch'])) {
-    $search = $_GET['liveSearch'];
-    if ($search != "") {
-        $stmt2 = $conn->prepare("SELECT * FROM products WHERE etiquette LIKE '%$search%'");
-        $stmt2->execute();
-        $searchedProducts = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($searchedProducts);
-    }
+    echo search($_GET['liveSearch']);
 }
 
 
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+    //echo $$str;
+    switch ($action) {
+        case 'updateValidClient':
+            echo updateValidClient($_GET['username'], $_GET['valid']);
+            break;
 
-// echo '<pre>';
-// print_r($result);
-// echo '</pre>';
+        default:
+            echo "[]";
+            break;
+    }
+}

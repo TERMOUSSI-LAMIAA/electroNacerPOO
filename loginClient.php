@@ -1,7 +1,7 @@
 <?php
-require_once('Model/connexion.php');
-require_once('classes/client.php');
-require_once('DAO/clientDAO.php');
+require_once(dirname(__FILE__) . '/Model/connexion.php');
+require_once(dirname(__FILE__) . '/classes/client.php');
+require_once(dirname(__FILE__) . '/DAO/clientDAO.php');
 session_start();
 
 if (!isset($_SESSION['client'])) {
@@ -11,9 +11,10 @@ if (!isset($_SESSION['client'])) {
 
         $clientDAO = new ClientDAO();
         $client = $clientDAO->getClientByUsername($username);
-        if ($client && password_verify($pass, $client->getMdpCl())) {
+        if ($client && password_verify($pass, $client->getMdpCl()) && $client->getIsValid()) {
             $_SESSION["client"]["fullname"] = $client->getFullnom();
             $_SESSION["client"]["username"] = $client->getUsername();
+            $_SESSION["client"]["isValid"] = $client->getIsValid();
             header('Location: index.php');
             exit;
         } else {
@@ -130,7 +131,7 @@ if (!isset($_SESSION['client'])) {
             <div id="responsive-nav">
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
-                <!-- <li class="active"><a href="#">Home</a></li>
+                    <!-- <li class="active"><a href="#">Home</a></li>
                     <li><a href="#">Hot Deals</a></li>
                     <li><a href="#">Categories</a></li>
                     <li><a href="#">Laptops</a></li>

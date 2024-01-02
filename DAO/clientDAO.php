@@ -1,6 +1,6 @@
 <?php
-require_once('Model/connexion.php');
-require_once('classes/client.php');
+require_once(dirname(__FILE__) . '/../Model/connexion.php');
+require_once(dirname(__FILE__) . '/../classes/client.php');
 
 class ClientDAO
 {
@@ -9,7 +9,7 @@ class ClientDAO
     {
         $this->db = Database::getInstance()->getConnection();
     }
-    public function getClient()
+    public function getClients()
     {
         $query = "SELECT * FROM clients";
         $stmt = $this->db->prepare($query);
@@ -17,7 +17,7 @@ class ClientDAO
         $result = $stmt->fetchAll();
         $clients = array();
         foreach ($result as $row) {
-            $clients[] = new Client($row["full_name"], $row["username"], $row["email"], $row["password"], $row["adresse"], $row["ville"], $row["phone"]);
+            $clients[] = new Client($row["full_name"], $row["username"], $row["email"], $row["password"], $row["adresse"], $row["ville"], $row["phone"], $row["isValid"]);
         }
         return $clients;
     }
@@ -30,7 +30,7 @@ class ClientDAO
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-            return new Client($result["full_name"], $result["username"], $result["email"], $result["password"], $result["adresse"], $result["ville"], $result["phone"]);
+            return new Client($result["full_name"], $result["username"], $result["email"], $result["password"], $result["adresse"], $result["ville"], $result["phone"], $result["isValid"]);
         } else {
             return null;
         }
@@ -98,6 +98,35 @@ class ClientDAO
         } catch (PDOException $e) {
             throw $e;
         }
+    }
+    public function updateClientValid($username, $valid = true)
+    {
+        $query = "UPDATE clients SET 
+                  isValid = :valid 
+                  WHERE `username` = :username";
+
+        $stmt = $this->db->prepare($query);
+
+        $valid = $valid ? 1 : 0;
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':valid', $valid);
+
+        try {
+            echo $stmt->execute();
+
+        } catch (PDOException $e) {
+            throw $e;
+        }
+    }
+    public function countCartItems($username)
+    {
+        $query = "SELECT SUM(qnt) as cart_count FROM panier WHERE client_username = :username";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return (isset($result[0]) && $result[0]['cart_count']) ? $result[0]['cart_count'] : 0;
     }
 }
 //insert

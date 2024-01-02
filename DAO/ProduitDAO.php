@@ -1,6 +1,6 @@
 <?php
-require_once('Model/connexion.php');
-require_once('classes/ProduitClass.php');
+require_once(dirname(__FILE__) . '/../Model/connexion.php');
+require_once(dirname(__FILE__) . '/../classes/ProduitClass.php');
 
 class ProduitDAO
 {
@@ -12,6 +12,41 @@ class ProduitDAO
     public function getProduit()
     {
         $query = "SELECT * FROM products";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $products = array();
+        foreach ($result as $row) {
+            $products[] = new Produit($row["reference"], $row["etiquette"], $row["codeBarres"], $row["prixAchat"], $row["prixFinal"], $row["prixOffre"], $row["descpt"], $row["qntMin"], $row["qntStock"], $row["img"], $row["catg"]);
+        }
+        return $products;
+    }
+
+    public function getProduits($isHide = false)
+    {
+        $query = "SELECT * FROM products";
+
+        if ($isHide) {
+            $query .= " WHERE isHide = 1 ";
+        } else {
+            $query .= " WHERE isHide = 0 ";
+        }
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $products = array();
+        foreach ($result as $row) {
+            $products[] = new Produit($row["reference"], $row["etiquette"], $row["codeBarres"], $row["prixAchat"], $row["prixFinal"], $row["prixOffre"], $row["descpt"], $row["qntMin"], $row["qntStock"], $row["img"], $row["catg"]);
+        }
+        return $products;
+    }
+
+
+    public function getProduitsByEtiquette($etiquette)
+    {
+        $query = "SELECT * FROM products WHERE etiquette LIKE '%$etiquette%'";
+
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -67,7 +102,6 @@ class ProduitDAO
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$title, $codeBar, $prixAchat, $prixFinal, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg]);
 
-        move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6v2\admin\assets\images\\' . $_FILES['img']['name']);
     }
     // public function updateProduct($Product)
     // {

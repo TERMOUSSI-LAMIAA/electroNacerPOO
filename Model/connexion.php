@@ -1,5 +1,5 @@
 <?php
-require_once 'Model/db_config.php';
+require_once(dirname(__FILE__) . '/db_config.php');
 
 class Database
 {

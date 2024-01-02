@@ -1,6 +1,6 @@
 <?php
-include("ajaxConn.php");
-include("DAO/ProduitDAO.php");
+session_start();
+require_once(dirname(__FILE__) . '/../DAO/ProduitDAO.php');
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

@@ -1,22 +1,24 @@
 <?php
-include("ajaxConn.php");
-include("DAO/ProduitDAO.php");
+session_start();
+require_once(dirname(__FILE__) . '/../DAO/ProduitDAO.php');
+require_once(dirname(__FILE__) . '/../DAO/categorieDAO.php');
+require_once(dirname(__FILE__) . '/../classes/ProduitClass.php');
 
-$productDAO = new ProductDAO();
-$product = new Product();
 
-$stmt2 = $conn->prepare('SELECT * FROM categories');
-$stmt2->execute();
-$catgs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+$productDAO = new ProduitDAO();
+
+
+$ctegorieDAO = new CategorieDAO();
+$catgs = $ctegorieDAO->getCategorie();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $hideProduct = $_POST["hided"];
 
-    if ($product->hideProduct($hideProduct)) {
-        echo "Product hidden successfully!";
-    } else {
-        echo "Error hiding the product.";
-    }
+    // if ($product->hideProduct($hideProduct)) {
+    //     echo "Product hidden successfully!";
+    // } else {
+    //     echo "Error hiding the product.";
+    // }
 
     header("Refresh: 1; url=hideProduct.php");
     exit;
@@ -51,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="col-md-10">
 
             <h1>Masquer une Produit</h1>
-            <?php if (count($product) > 0) { ?>
+            <?php if (count($catgs) > 0) { ?>
                 <form action="" method="post" class="container">
                     <div class="mb-3">
                         <label for="catg" class="form-label">Choisir un Produit</label>

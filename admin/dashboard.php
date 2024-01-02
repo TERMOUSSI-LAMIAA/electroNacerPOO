@@ -1,7 +1,9 @@
 <?php
-include("ajaxConn.php");
-include("DAO/ProduitDAO.php");
+session_start();
 
+require_once(dirname(__FILE__) . '/../DAO/ProduitDAO.php');
+require_once(dirname(__FILE__) . '/../DAO/categorieDAO.php');
+$catgs = (new CategorieDAO())->getCategorie();
 // if (isset($_SESSION['state'])) {
 ?>
 <?php
@@ -20,6 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $catg = $_POST["catg" . $i];
             $productInsertion = new ProduitDAO();
             $productInsertion->insertProduct($title, $codeBar, $prixAchat, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg);
+
+            move_uploaded_file($_FILES['img'. $i]['tmp_name'], dirname(__FILE__).'\assets\images\\' . $_FILES['img'. $i]['name']);
         }
     }
 }
@@ -31,7 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <style></style>
@@ -128,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <select name="catg${nbr}" id="" class="form-control">
                                     <?php
                                     foreach ($catgs as $item) {
-                                        echo "<option>" . $item["name"] . "</option>";
+                                        echo "<option>" . $item->getNomCat() . "</option>";
                                     }
                                     ?>
                                 </select>
@@ -139,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         let paragraph = document.createElement('p');
 
-        nbrSubmit.addEventListener('click', function() {
+        nbrSubmit.addEventListener('click', function () {
             if (nbrOfProduct.value < 1 || nbrOfProduct.value > 10) {
                 paragraph.innerText = "Please Enter a number between 1 and 10";
                 document.getElementById("nbrOfProductForm").appendChild(paragraph);
@@ -158,8 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </div>
                     `;
                 let productInsert = document.querySelectorAll('.productInsert');
-                productInsert.forEach(function(pro, i) {
-                    pro.addEventListener('click', function() {
+                productInsert.forEach(function (pro, i) {
+                    pro.addEventListener('click', function () {
                         if (document.getElementById(`formInser-${i + 1}`).style.display === 'none') {
                             document.getElementById(`formInser-${i + 1}`).style.cssText = `
                                     display: flex;  

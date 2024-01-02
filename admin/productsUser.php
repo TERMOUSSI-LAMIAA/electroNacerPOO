@@ -1,11 +1,12 @@
 <?php
-
-try {
-    include("ajaxConn.php");
-} catch (Exception $e) {
-    echo $e->getMessage();
+session_start();
+if (!isset($_SESSION["client"])) {
+    header("Location: index.php");
+    exit;
 }
-
+require_once(dirname(__FILE__) . '/../DAO/ProduitDAO.php');
+$produitDAO = new ProduitDAO();
+$product = $produitDAO->getProduits();
 
 
 ?>
@@ -54,18 +55,15 @@ try {
 
     <!-- <script src="script.js"></script> -->
     <script>
-        function getData(tableName) {
-            var result;
-            let myRequest = new XMLHttpRequest();
-            myRequest.open("GET", "ajaxConn.php?table=" + tableName, false);
-            myRequest.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                    result = JSON.parse(this.responseText);
-                }
-            }
-            myRequest.send();
+        async function getData(tableName) {
+            const response = await fetch('admin/ajaxConn.php?table=' + tableName);
+            const result = await response.json();
+            console.log(result);
             return result;
         }
+
+
+
 
         function displayProducts(object) {
             let product_card = document.createElement('div');
@@ -83,35 +81,47 @@ try {
             // product_card.style.display = 'none';
             document.querySelector('.product-menu').appendChild(product_card);
         }
-        let categories = getData('categories');
-        let products = getData('products');
 
-        /* Debut Filter */
 
-        let filterOfPro = document.getElementById('filter');
+        getData("products").then(products => {
+            productList = products;
 
-        for (let i = 0; i < categories.length; i++) {
-            filterOfPro.innerHTML += `
-                <option>${categories[i]['name']}</option>
-            `;
-            if (i === categories.length - 1) {
+            productList.forEach(function(product) {
+                displayProducts(product);
+            });
+        });
+
+
+        getData("categories").then(products => {
+            /* Debut Filter */
+
+            let filterOfPro = document.getElementById('filter');
+
+            for (let i = 0; i < categories.length; i++) {
                 filterOfPro.innerHTML += `
-                <option value=${1}>produits en rupture de stock</option>
-            `;
-            }
-        }
-
-        filterOfPro.addEventListener('change', function() {
-            document.querySelector('.product-menu').innerHTML = '';
-
-            for (let i = 0; i < products.length; i++) {
-
-                if (products[i]['catg'] === filterOfPro.value) {
-                    displayProducts(products[i]);
+                    <option>${categories[i]['name']}</option>
+                `;
+                if (i === categories.length - 1) {
+                    filterOfPro.innerHTML += `
+                        <option value=${1}>produits en rupture de stock</option>
+                    `;
                 }
             }
+
+            filterOfPro.addEventListener('change', function() {
+                document.querySelector('.product-menu').innerHTML = '';
+
+                for (let i = 0; i < products.length; i++) {
+
+                    if (products[i]['catg'] === filterOfPro.value) {
+                        displayProducts(products[i]);
+                    }
+                }
+            });
+            /* Fin Filter */
         });
-        /* Fin Filter */
+
+
 
 
         /* Debut Pagination */
